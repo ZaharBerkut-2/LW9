@@ -1,22 +1,8 @@
-using Microsoft.OpenApi.Models;
 var builder = WebApplication.CreateBuilder(args);
+
 var port = Environment.GetEnvironmentVariable("PORT") ?? "5000";
+
 builder.WebHost.ConfigureKestrel(options =>
 {
     options.ListenAnyIP(Int32.Parse(port));
 });
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(c =>
-{
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "My Railway API", Version = "v1" });
-});
-var app = builder.Build();
-app.UseSwagger();
-app.UseSwaggerUI(c =>
-{
-    c.SwaggerEndpoint("/swagger/v1/swagger.json", "My Railway API v1");
-});
-app.MapGet("/", () => "Hello Railway!");
-app.MapGet("/add", (int a, int b) => Results.Ok(new { result = a + b }));
-app.MapGet("/time", () => DateTime.UtcNow);
-app.Run();
